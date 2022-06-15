@@ -1,11 +1,11 @@
-import { Stage } from 'melonjs/dist/melonjs.module.js';
+import { Stage, game, ColorLayer } from 'melonjs/dist/melonjs.module.js';
 
 class TitleScreen extends Stage {
     /**
      *  action to perform on state change
      */
     onResetEvent() {
-        ; // TODO
+        game.world.addChild(new ColorLayer("background", "#fefe"))
     }
 
     /**

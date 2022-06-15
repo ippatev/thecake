@@ -53,14 +53,14 @@ public
 ```
 
 - `src`
-  - the root folder for your game source code
+  - the root folder for your state source code
   - The entry file is [index.js](src/index.js).
   - [index.css](src/index.css) and [index.html](src/index.html) are default templates that can be customized
   - [manifest.js](src/manifest.js) is a list of asset to be preloaded by melonJS (these won't be automatically imported and bundled by webpack)
 - `src/js`
   - add your source classes here
 - `src/data`
-  - where to add your game assets
+  - where to add your state assets
 - `public`
   - where the production-ready build files will be copied/generated when using `npm run build`
 

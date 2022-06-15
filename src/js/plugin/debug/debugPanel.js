@@ -476,7 +476,7 @@ class DebugPanel extends me.Renderable {
      */
     show() {
         if (!this.visible) {
-            // add the debug panel to the game world
+            // add the debug panel to the state world
             me.game.world.addChild(this, Infinity);
             // register a mouse event for the checkboxes
             me.input.registerPointerEvent("pointerdown", this, this.onClick.bind(this));
@@ -495,7 +495,7 @@ class DebugPanel extends me.Renderable {
         if (this.visible) {
             // release the mouse event for the checkboxes
             me.input.releasePointerEvent("pointerdown", this);
-            // remove the debug panel from the game world
+            // remove the debug panel from the state world
             me.game.world.removeChild(this, true);
             // mark it as invisible
             this.visible = false;
