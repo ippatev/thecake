@@ -572,6 +572,31 @@
       },
       "pivot": {
         "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "cake.png",
+      "frame": {
+        "x": 225,
+        "y": 292,
+        "w": 32,
+        "h": 32
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 32,
+        "h": 32
+      },
+      "sourceSize": {
+        "w": 32,
+        "h": 32
+      },
+      "pivot": {
+        "x": 0.5,
         "y": 1.0
       }
     },
@@ -603,7 +628,7 @@
   ],
   "meta": {
     "app": "http://free-tex-packer.com",
-    "version": "0.6.6",
+    "version": "0.6.7",
     "image": "texture.png",
     "format": "RGBA8888",
     "size": {

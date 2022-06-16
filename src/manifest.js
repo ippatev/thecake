@@ -32,6 +32,7 @@ const DataManifest = [
      * { name: "example01", type: "tmx", src: "data/map/example01.json" },
      */
     { name: "map1",            type: "tmx",    src: "data/map/map1.json" },
+    { name: "map2",            type: "tmx",    src: "data/map/map2.json" },
 
 
     /* Tilesets.

@@ -25,7 +25,6 @@ import CoinEntity from "./js/renderables/coin";
 
 
 device.onReady(() => {
-
     // initialize the display canvas once the device/browser is ready
     if (!video.init(800, 600, {parent : "screen", scaleMethod: "flex-width", renderer: video.AUTO, preferWebGL1: false})) {
         alert("Your browser does not support HTML5 canvas.");

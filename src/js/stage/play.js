@@ -10,7 +10,7 @@ class PlayScreen extends Stage {
      */
     onResetEvent() {
       // load a level
-        level.load("map1");
+        level.load("map2");
 
         // reset the score
         state.data.score = 0;

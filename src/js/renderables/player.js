@@ -109,13 +109,16 @@ class PlayerEntity extends Entity {
         }
 
         // check if we fell into a hole
-        if (!this.inViewport && (this.pos.y > video.renderer.getHeight())) {
+        if (!this.inViewport && (this.pos.y > video.renderer.getHeight()) || state.data.life < 1) {
             // if yes reset the state
             game.world.removeChild(this);
             game.viewport.fadeIn("#fff", 150, function(){
                 audio.play("die", false);
                 level.reload();
                 game.viewport.fadeOut("#fff", 150);
+
+                state.data.score = 0;
+                state.data.life = 3;
             });
             return true;
         }
@@ -214,6 +217,8 @@ class PlayerEntity extends Entity {
             // flash the screen
             game.viewport.fadeIn("#FFFFFF", 75);
             audio.play("die", false);
+
+            state.data.life -= 1
         }
     }
 };

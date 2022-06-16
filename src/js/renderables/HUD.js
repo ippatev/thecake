@@ -98,10 +98,12 @@ class ScoreItem extends BitmapText {
      * constructor
      */
     constructor(x, y) {
+        console.log('W: ', game.viewport.width)
+        console.log('H: ', game.viewport.height)
         // call the super constructor
         super(
             game.viewport.width  + x,
-            game.viewport.height + y,
+            y,
             {
                 font : "PressStart2P",
                 textAlign : "right",
@@ -134,6 +136,50 @@ class ScoreItem extends BitmapText {
     }
 };
 
+class LifeItem extends BitmapText {
+    /**
+     * constructor
+     */
+    constructor(x, y) {
+        console.log('W: ', game.viewport.width)
+        console.log('H: ', game.viewport.height)
+        // call the super constructor
+        super(
+            game.viewport.width  + x,
+            y,
+            {
+                font : "PressStart2P",
+                textAlign : "right",
+                textBaseline : "bottom",
+                text : "3"
+            }
+        );
+
+        this.relative = new Vector2d(x, y);
+
+        // local copy of the global score
+        this.life = -1;
+
+        // recalculate the object position if the canvas is resize
+        event.on(event.CANVAS_ONRESIZE, (function(w, h){
+            this.pos.set(w, h, 0).add(this.relative);
+        }).bind(this));
+    }
+
+    /**
+     * update function
+     */
+    update( dt ) {
+        if (this.life !== state.data.life) {
+            this.life = state.data.life;
+            this.setText(this.life);
+            this.isDirty = true;
+        }
+        return super.update(dt);
+    }
+};
+
+
 /**
  * a HUD container and child items
  */
@@ -149,14 +195,17 @@ class UIContainer extends Container {
         // Use screen coordinates
         this.floating = true;
 
-        // make sure our object is always draw first
+        // make sure or object is always draw first
         this.z = Infinity;
 
         // give a name
         this.name = "HUD";
 
         // add our child score object at position
-        this.addChild(new ScoreItem(50, 50));
+        this.addChild(new ScoreItem(-10, 25));
+
+        // add out child life object at position
+        this.addChild(new LifeItem(-10, 50));
 
         // add our audio control object
         this.addChild(new AudioControl(36, 56));
