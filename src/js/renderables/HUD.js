@@ -93,7 +93,20 @@ class AudioControl extends GUI_Object {
 /**
  * a basic HUD item to display score
  */
-class ScoreItem extends BitmapText {
+class ScoreItemImg extends GUI_Object {
+    /**
+     * constructor
+     */
+    constructor(x, y) {
+        super(game.viewport.width + x, y, {
+            image: state.texture,
+            region : "cake.png"
+        });
+        this.anchorPoint.set(0, 0);
+    }
+};
+
+class ScoreItemText extends BitmapText {
     /**
      * constructor
      */
@@ -136,7 +149,7 @@ class ScoreItem extends BitmapText {
     }
 };
 
-class LifeItem extends BitmapText {
+class LifeItemText extends BitmapText {
     /**
      * constructor
      */
@@ -179,6 +192,19 @@ class LifeItem extends BitmapText {
     }
 };
 
+class LifeItemImg extends GUI_Object {
+    /**
+     * constructor
+     */
+    constructor(x, y) {
+        super(game.viewport.width + x, y, {
+            image: state.texture,
+            region : "coin.png"
+        });
+        this.anchorPoint.set(0, 0);
+    }
+};
+
 
 /**
  * a HUD container and child items
@@ -202,10 +228,11 @@ class UIContainer extends Container {
         this.name = "HUD";
 
         // add our child score object at position
-        this.addChild(new ScoreItem(-10, 25));
+        let scoreItemImg = this.addChild(new ScoreItemImg(-50, 5));
+        let scoreItemText = this.addChild(new ScoreItemText(-60, 30));
 
-        // add out child life object at position
-        this.addChild(new LifeItem(-10, 50));
+        let lifeItemImg = this.addChild(new LifeItemImg(-50, 50));
+        let lifeItemText = this.addChild(new LifeItemText(-60, 75))
 
         // add our audio control object
         this.addChild(new AudioControl(36, 56));
@@ -214,6 +241,20 @@ class UIContainer extends Container {
             // add our fullscreen control object
             this.addChild(new FSControl(36 + 10 + 48, 56));
         }
+
+        event.on(event.WINDOW_ONRESIZE, () =>  {
+            // add our child score object at position
+            this.removeChildNow(scoreItemImg, true);
+            scoreItemImg = this.addChild(new ScoreItemImg(-50, 5));
+            this.removeChildNow(scoreItemText, true);
+            scoreItemText = this.addChild(new ScoreItemText(-60, 30));
+
+            // add out child life object at position
+            this.removeChildNow(lifeItemImg, true);
+            lifeItemImg = this.addChild(new LifeItemImg(-50, 50));;
+            this.removeChildNow(lifeItemText, true)
+            lifeItemText = this.addChild(new LifeItemText(-60, 75))
+        })
     }
 }
 

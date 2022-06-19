@@ -1,10 +1,10 @@
-import * as me from 'melonjs/dist/melonjs.module.js';
+import { Container, game, event, Vector2d, Sprite, GUI_Object, input } from 'melonjs/dist/melonjs.module.js';
 import state from '../state.js';
 
 /**
  * a basic control to toggle fullscreen on/off
  */
-class Button extends me.GUI_Object {
+class Button extends GUI_Object {
     /**
      * constructor
      */
@@ -22,7 +22,7 @@ class Button extends me.GUI_Object {
      */
     onClick(event) {
         this.setOpacity(0.5);
-        me.input.triggerKeyEvent(me.input.KEY.SPACE, true);
+        input.triggerKeyEvent(input.KEY.SPACE, true);
         return false;
     }
 
@@ -31,16 +31,103 @@ class Button extends me.GUI_Object {
      */
     onRelease(event) {
         this.setOpacity(0.25);
-        me.input.triggerKeyEvent(me.input.KEY.SPACE, false);
+        input.triggerKeyEvent(input.KEY.SPACE, false);
         return false;
     }
 };
 
+class ButtonRight extends GUI_Object {
+    /**
+     * constructor
+     */
+    constructor(x, y) {
+        super(x, y, {
+            image: state.texture,
+            region : "shadedDark36.png"
+        });
+        this.setOpacity(0.25);
+        this.anchorPoint.set(0, 0);
+    }
+
+    /**
+     * function called when the object is clicked on
+     */
+    onClick(event) {
+        this.setOpacity(0.5);
+        input.triggerKeyEvent(input.KEY.RIGHT, true);
+        return false;
+    }
+
+
+    /*
+    onOver(event) {
+    }
+     */
+
+    /**
+     * function called when the object is clicked on
+     */
+    onRelease(event) {
+        this.setOpacity(0.25);
+        input.triggerKeyEvent(input.KEY.RIGHT, false);
+        return false;
+    }
+
+    onOut(event) {
+        this.setOpacity(0.25);
+        input.triggerKeyEvent(input.KEY.RIGHT, false);
+        return false
+    }
+};
+
+class ButtonLeft extends GUI_Object {
+    /**
+     * constructor
+     */
+    constructor(x, y) {
+        super(x, y, {
+            image: state.texture,
+            region : "shadedDark36.png"
+        });
+        this.setOpacity(0.25);
+        this.anchorPoint.set(0, 0);
+    }
+
+    /**
+     * function called when the object is clicked on
+     */
+    onClick(event) {
+        this.setOpacity(0.5);
+        input.triggerKeyEvent(input.KEY.LEFT, true);
+        return false;
+    }
+
+
+    /*
+    onOver(event) {
+    }
+     */
+
+    /**
+     * function called when the object is clicked on
+     */
+    onRelease(event) {
+        this.setOpacity(0.25);
+        input.triggerKeyEvent(input.KEY.LEFT, false);
+        return false;
+    }
+
+    onOut(event) {
+        this.setOpacity(0.25);
+        input.triggerKeyEvent(input.KEY.LEFT, false);
+        return false
+    }
+};
 
 /**
  * a virtual joypad
  */
-class Joypad extends me.GUI_Object {
+class Joypad extends GUI_Object {
     /**
      * constructor
      */
@@ -49,24 +136,24 @@ class Joypad extends me.GUI_Object {
             // background "fix" part of the joypad
             image: state.texture,
             region : "shadedDark07.png",
-            anchorPoint : new me.Vector2d(0, 0)
+            anchorPoint : new Vector2d(0, 0)
         });
 
         // mobile part of the joypad
-        this.pad = new me.Sprite(x, y, {
+        this.pad = new Sprite(x, y, {
             image: state.texture,
             region : "shadedDark01.png",
-            anchorPoint : new me.Vector2d(0, 0)
+            anchorPoint : new Vector2d(0, 0)
         });
 
         // default relative position from the back of the joypad
-        this.relative = new me.Vector2d(
+        this.relative = new Vector2d(
             this.width / 2 - this.pad.width / 2,
             this.height / 2 - this.pad.height /2
         );
 
         // offset by which the joypad move when pressed/moved
-        this.joypad_offset = new me.Vector2d();
+        this.joypad_offset = new Vector2d();
 
         // default opacity
         this.setOpacity(0.25);
@@ -81,12 +168,12 @@ class Joypad extends me.GUI_Object {
         };
 
         // register on the pointermove event
-        me.input.registerPointerEvent('pointermove', this, this.pointerMove.bind(this));
+        input.registerPointerEvent('pointermove', this, this.pointerMove.bind(this));
     }
 
     onDestroyEvent() {
         // release register event event
-        me.input.releasePointerEvent("pointermove", this);
+        input.releasePointerEvent("pointermove", this);
     }
 
     /**
@@ -113,25 +200,25 @@ class Joypad extends me.GUI_Object {
     checkDirection(x, y) {
         if (x - this.pos.x < this.width / 2) {
             if (this.cursors.left === false) {
-                me.input.triggerKeyEvent(me.input.KEY.LEFT, true);
+                input.triggerKeyEvent(input.KEY.LEFT, true);
                 this.cursors.left = true;
                 this.joypad_offset.x = -((this.width / 2 - (x - this.pos.x)) % this.pad.width / 4);
             }
             // release the right key if it was pressed
             if (this.cursors.right === true) {
-                me.input.triggerKeyEvent(me.input.KEY.RIGHT, false);
+                input.triggerKeyEvent(input.KEY.RIGHT, false);
                 this.cursors.right = false;
             }
         }
         if (x - this.pos.x > this.width / 2) {
             if (this.cursors.right === false) {
-                me.input.triggerKeyEvent(me.input.KEY.RIGHT, true);
+                input.triggerKeyEvent(input.KEY.RIGHT, true);
                 this.cursors.right = true;
                 this.joypad_offset.x = +(((x - this.pos.x) - this.width / 2) % this.pad.width / 4);
             }
             // release the left key is it was pressed
             if (this.cursors.left === true) {
-                me.input.triggerKeyEvent(me.input.KEY.LEFT, false);
+                input.triggerKeyEvent(input.KEY.LEFT, false);
                 this.cursors.left = false;
             }
         }
@@ -154,11 +241,11 @@ class Joypad extends me.GUI_Object {
     onRelease(event) {
         this.setOpacity(0.25);
         if (this.cursors.left === true) {
-            me.input.triggerKeyEvent(me.input.KEY.LEFT, false);
+            input.triggerKeyEvent(input.KEY.LEFT, false);
             this.cursors.left = false;
         }
         if (this.cursors.right === true) {
-            me.input.triggerKeyEvent(me.input.KEY.RIGHT, false);
+            input.triggerKeyEvent(input.KEY.RIGHT, false);
             this.cursors.right = false;
         }
         this.joypad_offset.set(0, 0);
@@ -180,7 +267,7 @@ class Joypad extends me.GUI_Object {
  * a very simple virtual joypad and buttons, that triggers
  * corresponding key events
  */
-class VirtualJoypad extends me.Container {
+class VirtualJoypad extends Container {
 
     constructor() {
 
@@ -200,25 +287,41 @@ class VirtualJoypad extends me.Container {
         this.name = "VirtualJoypad";
 
         // instance of the virtual joypad
+        /*
         this.joypad = new Joypad(
             50,
-            me.game.viewport.height - 200
+            game.viewport.height - 200
         );
+         */
 
         // instance of the button
         this.button = new Button(
-            me.game.viewport.width - 150,
-            me.game.viewport.height - 150
+            game.viewport.width - 150,
+            game.viewport.height - 150
         );
 
-        this.addChild(this.joypad);
+
+        this.buttonLeft = new ButtonLeft(
+            50,
+            game.viewport.height - 150
+        )
+
+        this.buttonRight = new ButtonRight(
+            this.buttonLeft.pos.x + 100,
+            game.viewport.height - 150
+        )
+
+        //this.addChild(this.joypad);
         this.addChild(this.button);
+        this.addChild(this.buttonLeft)
+        this.addChild(this.buttonRight)
+        //this.addChild(this.joypad);
 
         // re-position the button in case of
         // size/orientation change
         var self = this;
-        me.event.on(
-            me.event.VIEWPORT_ONRESIZE, function (width, height) {
+        event.on(
+           event.VIEWPORT_ONRESIZE, function (width, height) {
                 self.button.pos.set(
                     width - 150,
                     height - 150,

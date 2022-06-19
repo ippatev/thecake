@@ -1,11 +1,11 @@
-import * as me from 'melonjs/dist/melonjs.module.js';
+import {game, audio, Entity, Rect, collision, ParticleEmitter} from 'melonjs/dist/melonjs.module.js';
 import state from '../state.js';
 
 /**
  * An enemy entity
  * follow a horizontal path defined by the box size in Tiled
  */
-class PathEnemyEntity extends me.Entity {
+class PathEnemyEntity extends Entity {
     /**
      * constructor
      */
@@ -19,7 +19,7 @@ class PathEnemyEntity extends me.Entity {
         settings.height = settings.frameheight;
 
         // redefine the default shape (used to define path) with a shape matching the renderable
-        settings.shapes[0] = new me.Rect(0, 0, settings.framewidth, settings.frameheight);
+        settings.shapes[0] = new Rect(0, 0, settings.framewidth, settings.frameheight);
 
         // call the super constructor
         super(x, y, settings);
@@ -40,10 +40,10 @@ class PathEnemyEntity extends me.Entity {
         this.body.setMaxVelocity(settings.velX || 1, settings.velY || 0);
 
         // set a "enemyObject" type
-        this.body.collisionType = me.collision.types.ENEMY_OBJECT;
+        this.body.collisionType = collision.types.ENEMY_OBJECT;
 
         // only check for collision against player and world shape
-        this.body.setCollisionMask(me.collision.types.PLAYER_OBJECT | me.collision.types.WORLD_SHAPE);
+        this.body.setCollisionMask(collision.types.PLAYER_OBJECT | collision.types.WORLD_SHAPE);
 
         // don't update the entities when out of the viewport
         this.alwaysUpdate = false;
@@ -87,13 +87,13 @@ class PathEnemyEntity extends me.Entity {
             // make it dead
             this.alive = false;
             //avoid further collision and delete it
-            this.body.setCollisionMask(me.collision.types.NO_OBJECT);
+            this.body.setCollisionMask(collision.types.NO_OBJECT);
             // make the body static
             this.body.setStatic(true);
             // set dead animation
             this.renderable.setCurrentAnimation("dead");
 
-            var emitter = new me.ParticleEmitter(this.centerX, this.centerY, {
+            var emitter = new ParticleEmitter(this.centerX, this.centerY, {
                 width: this.width / 4,
                 height : this.height / 4,
                 tint: this.particleTint,
@@ -104,12 +104,12 @@ class PathEnemyEntity extends me.Entity {
                 speed: 3
             });
 
-            me.game.world.addChild(emitter,this.pos.z);
-            me.game.world.removeChild(this);
+            game.world.addChild(emitter,this.pos.z);
+            game.world.removeChild(this);
             emitter.burstParticles();
 
             // dead sfx
-            me.audio.play("enemykill", false);
+            audio.play("enemykill", false);
             // give some score
             //state.data.score += 150;
         }

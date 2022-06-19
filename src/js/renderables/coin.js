@@ -1,7 +1,7 @@
-import * as me from 'melonjs/dist/melonjs.module.js';
+import { game, audio, Collectable, Ellipse, collision } from 'melonjs/dist/melonjs.module.js';
 import state from '../state.js';
 
-class CoinEntity extends me.Collectable {
+class CoinEntity extends Collectable {
     /**
      * constructor
      */
@@ -11,7 +11,7 @@ class CoinEntity extends me.Collectable {
             Object.assign({
                 image: state.texture,
                 region : "cake.png",
-                shapes :[new me.Ellipse(32 / 2, 32 / 2, 32, 32)] // coins are 35x35
+                shapes :[new Ellipse(32 / 2, 32 / 2, 32, 32)] // coins are 35x35
             })
         );
     }
@@ -20,23 +20,27 @@ class CoinEntity extends me.Collectable {
     onResetEvent(x, y, settings) {
         this.shift(x, y);
         // only check for collision against player
-        this.body.setCollisionMask(me.collision.types.PLAYER_OBJECT);
+        this.body.setCollisionMask(collision.types.PLAYER_OBJECT);
     }
 
     /**
      * collision handling
      */
     onCollision(/*response*/) {
+        if(state.data.score >= 5) {
+            // me.stae.change(me.state.PAUSE)
+        }
+
 
         // do something when collide
-        me.audio.play("cling", false);
+        audio.play("cling", false);
         // give some score
         state.data.score += 1;
 
         //avoid further collision and delete it
-        this.body.setCollisionMask(me.collision.types.NO_OBJECT);
+        this.body.setCollisionMask(collision.types.NO_OBJECT);
 
-        me.game.world.removeChild(this);
+        game.world.removeChild(this);
 
         return false;
     }
