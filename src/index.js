@@ -15,13 +15,16 @@ import state from 'js/state'
 
 import 'index.css';
 
-import TitleScreen from 'js/stage/title.js';
+import ReadyScreen from 'js/stage/ready.js';
 import PlayScreen from 'js/stage/play.js';
+import LoadingScreen from 'js/stage/loading.js'
+
 import PlayerEntity from 'js/renderables/player.js';
 
 import DataManifest from 'manifest.js';
 import {FlyEnemyEntity, SlimeEnemyEntity} from "./js/renderables/enemies";
 import CoinEntity from "./js/renderables/coin";
+import axios from "axios";
 
 
 device.onReady(() => {
@@ -43,13 +46,16 @@ device.onReady(() => {
     // Initialize the audio.
     audio.init("mp3,ogg");
 
+    // Set custom loading screen
+    meState.set(meState.LOADING, new LoadingScreen())
+
     // allow cross-origin for image/texture loading
     loader.crossOrigin = "anonymous";
 
     // set and load all resources.
     loader.preload(DataManifest, function() {
         // set the user defined state stages
-        meState.set(meState.MENU, new TitleScreen());
+        meState.set(meState.READY, new ReadyScreen());
         meState.set(meState.PLAY, new PlayScreen());
 
         // add our player entity in the entity pool
@@ -61,6 +67,15 @@ device.onReady(() => {
         state.texture = new TextureAtlas(loader.getJSON("texture"), loader.getImage("texture"))
 
         event.on(event.KEYDOWN, (action, keyCode) => {
+            // change global volume setting
+            if (keyCode === input.KEY.PLUS) {
+                // increase volume
+                audio.setVolume(audio.getVolume()+0.1);
+            } else if (keyCode === input.KEY.MINUS) {
+                // decrease volume
+                audio.setVolume(audio.getVolume()-0.1);
+            }
+
             // toggle fullscreen on/off
             if (keyCode === input.KEY.F) {
                 if (!device.isFullscreen) {
@@ -69,9 +84,27 @@ device.onReady(() => {
                     device.exitFullscreen();
                 }
             }
+
+            if(keyCode === input.KEY.Q) {
+                axios.get('https://jsonplaceholder.typicode.com/todos/1').then((res) => {
+                   console.log('GET -> ', res.data)
+                }).catch((err) => new Error(err))
+            }
         })
 
-        // Start the state.
-        meState.change(meState.PLAY);
+        if(device.isPortrait()) {
+            console.log('isPortrait')
+            meState.change(meState.READY)
+        } else {
+            // switch to PLAY state
+            meState.change(meState.PLAY);
+        }
+
+        event.on(event.WINDOW_ONRESIZE, (event) =>  {
+            if(device.isLandscape()) {
+                // switch to PLAY state
+                meState.change(meState.PLAY);
+            }
+        })
     });
 });
