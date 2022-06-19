@@ -13,11 +13,6 @@ const DataManifest = [
         type: "binary",
         src: "./data/fnt/PressStart2P.fnt"
     },
-    {
-        name: "myButton",
-        type: "image",
-        src: "./data/img/button.png"
-    },
     /* Graphics.
      * @example
      * { name: "example", type:"image", src: "data/img/example.png" },
@@ -33,6 +28,7 @@ const DataManifest = [
      */
     { name: "map1",            type: "tmx",    src: "data/map/map1.json" },
     { name: "map2",            type: "tmx",    src: "data/map/map2.json" },
+    { name: "map3",            type: "tmx",    src: "data/map/map3.json" },
 
 
     /* Tilesets.
